@@ -2,26 +2,30 @@
 Data Ingestion for Crop Recommendation Dataset
 """
 import pandas as pd
+import numpy as np
 import os
 import yaml
+import sys
 from pathlib import Path
+from src.logger import logging
+from sklearn.model_selection import train_test_split
 
-def load_params(params_path: str) -> dict:
-    """Load parameters from the yaml file"""
-    try:
-        with open(params_path, 'r') as file:
-            params = yaml.safe_load(file)
-        print(f'Parameters retrieved from {params_path}')
-        return params
-    except FileNotFoundError:
-        print(f'File not found: {params_path}')
-        raise
-    except yaml.YAMLError as e:
-        print(f"YAML ERROR: {e}")
-        raise
-    except Exception as e:
-        print(f'Unexpected Error: {e}')
-        raise
+# def load_params(params_path: str) -> dict:
+#     """Load parameters from the yaml file"""
+#     try:
+#         with open(params_path, 'r') as file:
+#             params = yaml.safe_load(file)
+#         print(f'Parameters retrieved from {params_path}')
+#         return params
+#     except FileNotFoundError:
+#         print(f'File not found: {params_path}')
+#         raise
+#     except yaml.YAMLError as e:
+#         print(f"YAML ERROR: {e}")
+#         raise
+#     except Exception as e:
+#         print(f'Unexpected Error: {e}')
+#         raise
 
 
 def load_data(data_url: str) -> pd.DataFrame:
@@ -79,35 +83,32 @@ def validate_data(df: pd.DataFrame) -> bool:
         return False
 
 
-def save_raw_data(df: pd.DataFrame, data_path: str) -> None:
-    """Save raw data to the specified path"""
+
+def save_data(df: pd.DataFrame, data_path: str) -> None:
+    """Save the dataset."""
     try:
         raw_data_path = os.path.join(data_path, 'raw')
         os.makedirs(raw_data_path, exist_ok=True)
-        
-        output_file = os.path.join(raw_data_path, 'Crop_recommendation.csv')
-        df.to_csv(output_file, index=False)
-        print(f"Raw data saved to {output_file}")
-        
+        df.to_csv(os.path.join(raw_data_path, "data.csv"), index=False)
+        logging.info('Data saved to %s', raw_data_path)
     except Exception as e:
-        print(f"Error while saving data: {e}")
+        logging.error('Unexpected error occurred while saving the data: %s', e)
         raise
-
 
 def main():
     """Main function to run data ingestion pipeline"""
     try:
         # Load parameters
-        params = load_params('params.yaml')
-        data_url = params['data_ingestion']['data_url']
-        data_path = params['data_ingestion']['data_path']
+        # params = load_params('params.yaml')
+        # data_url = params['data_ingestion']['data_url']
+        # data_path = params['data_ingestion']['data_path']
         
-        print("=" * 50)
+        # print("=" * 50)
         print("Starting Data Ingestion Pipeline")
-        print("=" * 50)
+        # print("=" * 50)
         
         # Load data
-        df = load_data(data_url)
+        df = load_data(data_url = "notebooks/Crop_recommendation.csv")
         
         # Validate data
         is_valid = validate_data(df)
@@ -115,7 +116,7 @@ def main():
             raise ValueError("Data validation failed!")
         
         # Save raw data
-        save_raw_data(df, data_path)
+        save_data(df, data_path = "./Datas")
         
         # Print summary
         print("\n" + "=" * 50)

@@ -1,53 +1,17 @@
-# Data Ingestion Parameters
 data_ingestion:
-  data_url: "data/raw/Crop_recommendation.csv"
-  data_path: "data"
+  raw_data_path: "/Users/arpitgupta/Desktop/MLOPS+LLMOPS/MLOPS-LLMOPS/Datas/raw/Crop_recommendation.csv"
 
-# Data Preprocessing Parameters
 data_preprocessing:
-  raw_data_path: "data/raw/Crop_recommendation.csv"
-  processed_data_path: "data/processed"
-  scalers_path: "artifacts/scalers"
-  encoders_path: "artifacts/encoders"
-  test_size: 0.2
+  test_size: 0.26
+  encoders_path: "/Users/arpitgupta/Desktop/MLOPS+LLMOPS/MLOPS-LLMOPS/models"
+  scalers_path: "/Users/arpitgupta/Desktop/MLOPS+LLMOPS/MLOPS-LLMOPS/models"
+  model_path: "/Users/arpitgupta/Desktop/MLOPS+LLMOPS/MLOPS-LLMOPS/models"
+  processed_data_path: "/Users/arpitgupta/Desktop/MLOPS+LLMOPS/MLOPS-LLMOPS/Datas/processed"
+
+# Random Forest Parameters
+random_forest:
+  n_estimators: 100
+  max_depth: 10
+  min_samples_split: 5
+  min_samples_leaf: 2
   random_state: 42
-
-# Model Training Parameters
-train_model:
-  processed_data_path: "data/processed"
-  model_path: "artifacts/models"
-  cv_folds: 5
-  
-  # Decision Tree Parameters
-  decision_tree:
-    criterion: "entropy"
-    max_depth: 5
-    random_state: 42
-  
-  # Random Forest Parameters
-  random_forest:
-    n_estimators: 100
-    max_depth: 10
-    min_samples_split: 5
-    min_samples_leaf: 2
-    random_state: 42
-  
-  # XGBoost Parameters
-  xgboost:
-    n_estimators: 100
-    max_depth: 6
-    learning_rate: 0.1
-    random_state: 42
-    eval_metric: "mlogloss"
-    use_label_encoder: false
-
-# MLflow Configuration
-mlflow:
-  tracking_uri: "http://localhost:5000"
-  experiment_name: "crop-recommendation"
-  registered_model_name: "crop-advisor-model"
-
-# DVC Configuration
-dvc:
-  remote_name: "storage"
-  remote_url: ""  # Set your remote storage URL (S3, GCS, Azure, etc.)

@@ -1,3 +1,7 @@
 .venv
 .env
 Crop_recommendation.csv
+.vscode 
+.python-version
+Datas
+dagshub.init(repo_owner='thearpitgupta2003', repo_name='MLOPS-LLMOPS', mlflow=True)
