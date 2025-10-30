@@ -149,3 +149,36 @@ Preprocessing completed successfully!
 [ 2025-10-27 16:53:37,098 ] root - INFO - runs:/06b2592b99254e718b520a4053c906bc/model
 [ 2025-10-27 16:54:46,668 ] root - ERROR - Error during model and transformer registration: API request to https://dagshub.com/thearpitgupta2003/MLOPS-LLMOPS.mlflow/api/2.0/mlflow/runs/get failed with exception HTTPSConnectionPool(host='dagshub.com', port=443): Max retries exceeded with url: /thearpitgupta2003/MLOPS-LLMOPS.mlflow/api/2.0/mlflow/runs/get?run_uuid=06b2592b99254e718b520a4053c906bc&run_id=06b2592b99254e718b520a4053c906bc (Caused by ResponseError('too many 500 error responses'))
 [ 2025-10-27 16:54:46,673 ] root - ERROR - Failed to complete the model registration process: API request to https://dagshub.com/thearpitgupta2003/MLOPS-LLMOPS.mlflow/api/2.0/mlflow/runs/get failed with exception HTTPSConnectionPool(host='dagshub.com', port=443): Max retries exceeded with url: /thearpitgupta2003/MLOPS-LLMOPS.mlflow/api/2.0/mlflow/runs/get?run_uuid=06b2592b99254e718b520a4053c906bc&run_id=06b2592b99254e718b520a4053c906bc (Caused by ResponseError('too many 500 error responses'))
+[ 2025-10-27 17:27:00,876 ] root - INFO - Data saved to ./Datas/raw
+[ 2025-10-27 17:28:00,600 ] root - INFO - Data saved to ./Datas/raw
+[ 2025-10-27 17:28:02,125 ] root - ERROR - Failed to complete the data preprocessing process: [Errno 2] No such file or directory: '/Users/arpitgupta/Desktop/MLOPS+LLMOPS/MLOPS-LLMOPS/Datas/raw/Crop_recommendation.csv'
+[ 2025-10-27 17:42:00,656 ] root - ERROR - Failed to complete the data preprocessing process: [Errno 2] No such file or directory: '/Users/arpitgupta/Desktop/MLOPS+LLMOPS/MLOPS-LLMOPS/Datas/raw/Crop_recommendation.csv'
+[ 2025-10-29 13:05:05,242 ] root - ERROR - Failed to complete the data preprocessing process: [Errno 2] No such file or directory: '/Users/arpitgupta/Desktop/MLOPS+LLMOPS/MLOPS-LLMOPS/Datas/raw/Crop_recommendation.csv'
+[ 2025-10-29 13:05:28,580 ] root - INFO - Raw data loaded successfully
+[ 2025-10-29 13:05:28,580 ] root - INFO - preprocessing the data 
+[ 2025-10-29 13:05:28,580 ] root - INFO - Starting the preprocessing Step
+[ 2025-10-29 13:05:28,585 ] root - INFO - Starting up with the train test split 
+[ 2025-10-29 13:05:28,587 ] root - INFO - Done with the splitting 
+[ 2025-10-29 13:05:28,587 ] root - INFO - Starting with the scaling 
+[ 2025-10-29 13:05:28,590 ] root - INFO - Done with the scailing  
+[ 2025-10-29 13:05:28,590 ] root - INFO - X_train_scaled shape : (1760, 7) and X_test_scaled (1760, 7)
+[ 2025-10-29 13:05:28,591 ] root - INFO - Converting the trained array into dataframe
+[ 2025-10-29 13:05:28,591 ] root - INFO - Converting the test array into dataframe
+[ 2025-10-29 13:05:28,591 ] root - INFO - 
+Preprocessing completed successfully!
+[ 2025-10-29 13:05:28,592 ] root - INFO - saving the preprocessing csv's 
+[ 2025-10-29 13:05:28,593 ] root - ERROR - Failed to complete the data preprocessing process: Cannot save file into a non-existent directory: '/Users/arpitgupta/Desktop/MLOPS+LLMOPS/MLOPS-LLMOPS/Datas/processed'
+[ 2025-10-29 13:05:54,286 ] root - INFO - Raw data loaded successfully
+[ 2025-10-29 13:05:54,286 ] root - INFO - preprocessing the data 
+[ 2025-10-29 13:05:54,286 ] root - INFO - Starting the preprocessing Step
+[ 2025-10-29 13:05:54,288 ] root - INFO - Starting up with the train test split 
+[ 2025-10-29 13:05:54,288 ] root - INFO - Done with the splitting 
+[ 2025-10-29 13:05:54,289 ] root - INFO - Starting with the scaling 
+[ 2025-10-29 13:05:54,291 ] root - INFO - Done with the scailing  
+[ 2025-10-29 13:05:54,291 ] root - INFO - X_train_scaled shape : (1760, 7) and X_test_scaled (1760, 7)
+[ 2025-10-29 13:05:54,291 ] root - INFO - Converting the trained array into dataframe
+[ 2025-10-29 13:05:54,291 ] root - INFO - Converting the test array into dataframe
+[ 2025-10-29 13:05:54,292 ] root - INFO - 
+Preprocessing completed successfully!
+[ 2025-10-29 13:05:54,292 ] root - INFO - saving the preprocessing csv's 
+[ 2025-10-29 13:05:54,317 ] root - INFO - Processed train and test data saved successfully in /Users/arpitgupta/Desktop/MLOPS+LLMOPS/MLOPS-LLMOPS/Datas/processed

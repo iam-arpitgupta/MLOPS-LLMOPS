@@ -53,7 +53,7 @@ def preprocess_data(df: pd.DataFrame, test_size: float, scalers_path: str, encod
         os.makedirs(scalers_path, exist_ok=True)
         scaler_file = os.path.join(scalers_path, 'scaler.pkl')
         with open(scaler_file, 'wb') as f:
-            pickle.dump(encoder, f)
+            pickle.dump(scaler, f)
 
         # Convert scaled arrays back to DataFrames with original column names
         logging.info("Converting the trained array into dataframe")

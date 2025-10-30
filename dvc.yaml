@@ -1,0 +1,44 @@
+stages:
+  data_ingestion:
+    cmd: python -m src.data.data_ingestion # <-- Change here
+    deps:
+      - src/data/data_ingestion.py
+    outs:
+      - Datas/raw
+
+  feature_engineering:
+    cmd: python -m src.features.feature_engineering # <-- Change here
+    deps:
+      - Datas/raw
+      - src/features/feature_engineering.py
+    outs:
+      - Datas/processed
+
+  model_building:
+    cmd: python -m src.model.model_building # <-- Change here
+    deps:
+      - Datas/processed
+      - src/model/model_building.py
+    params:
+      - model.C
+      - model.solver
+      - model.penalty
+    outs:
+      - models/model.pkl
+
+  model_evaluation:
+    cmd: python -m src.model.model_evaluation # <-- Change here
+    deps:
+      - models/model.pkl
+      - src/model/model_evaluation.py
+      - Datas/processed
+    metrics:
+      - reports/metrics.json
+    outs:
+      - reports/experiment_info.json
+
+  model_registration:
+    cmd: python -m src.model.register_model # <-- Change here
+    deps:
+      - reports/experiment_info.json
+      - src/model/register_model.py
