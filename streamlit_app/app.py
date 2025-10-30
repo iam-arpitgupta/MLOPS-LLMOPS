@@ -6,7 +6,7 @@ import google.generativeai as genai
 from io import BytesIO
 from dotenv import load_dotenv
 import os
-from promptlayer import PromptLayer
+
 
 # =========================
 # 🔧 CONFIGURATION
@@ -14,20 +14,18 @@ from promptlayer import PromptLayer
 st.set_page_config(page_title="🌾 Crop Advisor AI", layout="wide")
 st.title("🌾 Crop Advisor AI — ML + Gemini Agent")
 
+
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-PROMPTLAYER_API_KEY = os.getenv("PROMPTLAYER_API_KEY")
-if not PROMPTLAYER_API_KEY:
-    st.error("🚨 Please add your PROMPTLAYER_API_KEY in .env file.")
-    st.stop()
+
 
 if not GEMINI_API_KEY:
     st.error("🚨 Please add your GEMINI_API_KEY in .env file.")
     st.stop()
 
+
 genai.configure(api_key=GEMINI_API_KEY)
-# Initialize PromptLayer client
-pl = PromptLayer()
+
 
 # =========================
 # 🧠 LOAD MODEL ARTIFACTS
@@ -46,84 +44,11 @@ def load_artifacts():
         st.error(f"Error loading model files: {e}")
         return None, None, None
 
+
 model, scaler, encoder = load_artifacts()
 if model is None:
     st.stop()
 
-
-
-# ======================================
-# PROMPTLAYER HELPER
-# ======================================
-
-def extract_text_from_pl_response(resp: dict) -> str:
-    """
-    Try to robustly extract the final text from PromptLayer pl.run response.
-    Strategy:
-      1) resp.get('text') or resp.get('output_text') if present
-      2) resp['raw_response'] in Google format: candidates[0].content.parts[0].text
-      3) prompt_blueprint fallback: messages[-1].content[-1].text
-    """
-    for k in("text" , "output_text"):
-        v = resp.get(k)
-        if isinstance(v, str) and v.strip():
-            return v
-        
-    
-    # Raw response (Gemini SDK-like)
-    raw = resp.get("raw_response")
-    if isinstance(raw, dict):
-        cands = raw.get("candidates")
-        if isinstance(cands, list) and len(cands) > 0:
-            content = cands[0].get("content", {})
-            parts = content.get("parts", [])
-            if isinstance(parts, list) and len(parts) > 0 and isinstance(parts[0], dict):
-                if "text" in parts[0] and isinstance(parts[0]["text"], str):
-                    return parts[0]["text"]
-
-    # Blueprint fallback
-    try:
-        return resp["prompt_blueprint"]["prompt_template"]["messages"][-1]["content"][-1]["text"]
-    except Exception:
-        return ""
-
-def run_pl_prompt(prompt_name: str, input_vars: dict, model: str, release: str, tags=None, extra_meta=None):
-    """
-    Execute a PromptLayer-managed prompt on Gemini 2.5.
-    Assumes you've created a PromptLayer template with the given prompt_name and variables.
-    """
-    tags = tags or ["gemini25", "crop-advisor"]
-    metadata = {"session_id": st.session_state.session_id}
-    if extra_meta:
-        # PromptLayer metadata keys/values should be strings.
-        metadata.update({str(k): str(v) for k, v in extra_meta.items()})
-
-    # Core managed run: binds to template, release, tags, metadata, and overrides provider+model
-    resp = pl.run(
-        prompt_name=prompt_name,
-        input_variables=input_vars,
-        prompt_release_label=release,
-        provider="google",            # Use Google provider for Gemini
-        model=model,                  # e.g., "gemini-2.5-flash" or "gemini-2.5-pro"
-        tags=tags,
-        metadata=metadata,
-    )
-
-    request_id = resp.get("request_id")
-    text = extract_text_from_pl_response(resp)
-
-    return request_id, 
-
-
-def track_optional_score(pl_request_id: str, score_value: int = 95, score_name: str = "helpfulness"):
-    """
-    Optionally score a run to enable evaluation/analytics in PromptLayer dashboards.
-    """
-    try:
-        pl.track.score(request_id=pl_request_id, score=score_value, name=score_name)
-    except Exception:
-        # Non-fatal if scoring fails (keep UX smooth)
-        pass
 
 # ======================================
 # INITIALIZE GEMINI CHAT SESSION (with memory)
@@ -147,14 +72,18 @@ if "chat_session" not in st.session_state:
         ]
     )
 
+
 # ======================================
 # STREAMLIT UI SETUP
 # ======================================
 
+
 st.title("🌾 Smart Crop Advisor")
 st.markdown("### Predict the best crop and chat with an AI agriculture expert!")
 
+
 st.subheader("🧮 Enter Your Soil and Climate Data")
+
 
 col1, col2 = st.columns(2)
 with col1:
@@ -166,6 +95,7 @@ with col2:
     temperature = st.number_input("Temperature (°C)", 0.0, 50.0, 25.0)
     humidity = st.number_input("Humidity (%)", 0.0, 100.0, 80.0)
     rainfall = st.number_input("Rainfall (mm)", 0.0, 500.0, 200.0)
+
 
 # ======================================
 # PREDICTION SECTION
@@ -181,8 +111,10 @@ if st.button("🚜 Predict Crop"):
     crop_prediction_encoded = model.predict(input_scaled)[0]
     crop_prediction = encoder.inverse_transform([crop_prediction_encoded])[0]
 
+
     st.session_state["crop_prediction"] = crop_prediction
     st.success(f"🌱 Recommended Crop: **{crop_prediction}**")
+
 
     # Ask Gemini for a natural explanation
     ai_prompt = (
@@ -193,8 +125,10 @@ if st.button("🚜 Predict Crop"):
     ai_response = st.session_state.chat_session.send_message(ai_prompt)
     st.session_state["ai_explanation"] = ai_response.text
 
+
     st.markdown("### 🤖 AI Agent Explanation")
     st.write(ai_response.text)
+
 
 # ======================================
 # CHAT SECTION (ROOT LEVEL)
@@ -202,16 +136,20 @@ if st.button("🚜 Predict Crop"):
 st.divider()
 st.markdown("## 💬 Chat with Your AI Crop Advisor")
 
+
 # Display previous chat messages
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
+
 
 for message in st.session_state.chat_history:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+
 # Root-level chat input (must not be inside any container)
 user_input = st.chat_input("Ask about crops, fertilizers, or alternatives...")
+
 
 if user_input:
     # Display user message
@@ -219,11 +157,13 @@ if user_input:
     with st.chat_message("user"):
         st.markdown(user_input)
 
+
     # Gemini AI reply (context preserved automatically)
     ai_reply = st.session_state.chat_session.send_message(user_input)
     st.session_state.chat_history.append({"role": "assistant", "content": ai_reply.text})
     with st.chat_message("assistant"):
         st.markdown(ai_reply.text)
+
 
 # ======================================
 # REPORT DOWNLOAD
@@ -231,10 +171,12 @@ if user_input:
 st.divider()
 st.markdown("## 📄 Download Your Report")
 
+
 if "crop_prediction" in st.session_state:
     report_content = f"""
 🌾 Crop Recommendation Report
 -----------------------------
+
 
 📊 Input Data:
 Nitrogen (N): {N}
@@ -245,17 +187,22 @@ Temperature: {temperature}°C
 Humidity: {humidity}%
 Rainfall: {rainfall} mm
 
+
 ✅ Predicted Crop: {st.session_state['crop_prediction']}
+
 
 🤖 AI Explanation:
 {st.session_state['ai_explanation']}
 
+
 💬 Chat Summary:
 """
+
 
     for msg in st.session_state.chat_history:
         role = "User" if msg["role"] == "user" else "AI"
         report_content += f"\n{role}: {msg['content']}"
+
 
     st.download_button(
         label="⬇️ Download Report (.txt)",

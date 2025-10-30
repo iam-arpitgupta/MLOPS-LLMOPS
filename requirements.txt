@@ -12,7 +12,8 @@ psycopg2-binary==2.9.9
 # FastAPI
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
-pydantic==2.5.0
+pydantic>=2.10.6
+opik>=1.4.11
 
 # Data Validation
 pyyaml==6.0.1
