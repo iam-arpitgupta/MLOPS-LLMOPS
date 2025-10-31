@@ -5,20 +5,19 @@ import os
 import pickle 
 
 # --- Load Model ---
-# (Assuming 'model.pkl' and the CSV file are in the correct paths)
 try:
     with open('model.pkl', 'rb') as f:
         model = pickle.load(f)
 except FileNotFoundError:
     print("Error: 'model.pkl' not found.")
-    model = None  # Set model to None to avoid app crashing on load
+    model = None  
 
 try:
     DATA_PATH = "notebooks[experimentation]/Crop_recommendation.csv"
     full_data = pd.read_csv(DATA_PATH)
 except FileNotFoundError:
     print(f"Error: Data file not found at {DATA_PATH}")
-    full_data = pd.DataFrame() # Create empty dataframe
+    full_data = pd.DataFrame() 
 
 
 app = FastAPI(
@@ -51,12 +50,6 @@ def load_data():
     return full_data
 
 
-# Note: 'save_data' function was defined but never used in your endpoints.
-# You can add an endpoint to call it if needed.
-
-
-# --- API Endpoints ---
-
 @app.get("/")
 def hello():
     return {"message": "Welcome to the Crop Recommendation API"}
@@ -84,8 +77,6 @@ def predict(data: CropFeatures):
     if model is None:
         return {"error": "Model is not loaded. Cannot make prediction."}
 
-    # 1. Create DataFrame from the 7 input features
-    #    (No 'label' is included here)
     input_df = pd.DataFrame([{
             'N': data.N,
             'P': data.P,
@@ -95,9 +86,7 @@ def predict(data: CropFeatures):
             'ph': data.ph,
             'rainfall': data.rainfall
     }])
-
-    # 2. Make prediction
-    #    (Assuming your model was trained on columns in this order)
+  
     try:
         prediction = model.predict(input_df)[0]
         

@@ -1,0 +1,13 @@
+# dvc commands {after creating the dvc.yaml file }
+dvc init 
+dvc repro 
+dvc status 
+
+
+# command for fastapi {after building the api}
+uvicorn api.main:app --reload --port 8000
+
+
+# for buildin the docker image and contianer {after building the docker-file }
+docker build -t crop-advisor .
+docker run -p 8501:8501 crop-advisor
