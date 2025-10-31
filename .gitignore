@@ -4,9 +4,9 @@ Crop_recommendation.csv
 .vscode 
 .python-version
 dagshub.init(repo_owner='thearpitgupta2003', repo_name='MLOPS-LLMOPS', mlflow=True)
-dvc.lock
 src/__pycache__
 logs 
 .dvcignore 
 .dvc 
 src/mlops_llmops.egg-info
+prompt_monitoring/__pycache__
